@@ -20,7 +20,6 @@
 # /system_ext packages
 PRODUCT_PACKAGES += \
     CarrierConfig \
-    EmergencyInfo \
     preinstalled-packages-telephony-system-ext.xml \
     preinstalled-packages-gsi-system-ext.xml \
 
