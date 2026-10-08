@@ -606,6 +606,14 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None, otatools_dir=None):
       if spare_inodes < min_spare_inodes:
         spare_inodes = min_spare_inodes
       inodes += spare_inodes
+      # IchthysOS: reserved space is there so that files can be added or replaced on a
+      # partition remounted read-write (adb remount), and that takes free inodes too.
+      # Keep one per 16 KiB of reserve (the mke2fs default ratio) and pay for their table.
+      if reserved_size > 0:
+        reserved_inodes = reserved_size // 16384
+        inodes += reserved_inodes
+        size += reserved_inodes * int(fs_dict.get("Inode size", "256"))
+        size = common.RoundUpTo4K(size)
       prop_dict["extfs_inode_count"] = str(inodes)
       prop_dict["partition_size"] = str(size)
       logger.info(
